@@ -14,7 +14,7 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`h-screen bg-[var(--bg-clr)] text-[var(--txt-clr)] p-4 flex flex-col justify-between pry-ff transition-all duration-300 ${
+      className={`h-screen bg-[var(--bg-clr)] text-[var(--txt-clr)] p-4 flex flex-col justify-between pry-ff transition-all duration-300 border border-[#1A1B1A] ${
         collapsed ? 'w-20' : 'w-64'
       }`}
     >
@@ -37,7 +37,7 @@ export default function Sidebar() {
               key={name}
               href={href}
               className={`flex items-center gap-3 px-4 py-2 rounded-md transition ${
-                pathname === href ? 'bg-[var(--acc-clr)] text-white' : 'text-[var(--txt-clr)] hover:bg-zinc-800'
+                pathname === href ? 'bg-[#2B0B0A] text-[#E04B4C]' : 'text-[var(--txt-clr)] hover:bg-zinc-800'
               }`}
             >
               <Icon className="w-5 h-5" />
