@@ -6,11 +6,10 @@ import DotsLoader from '@/components/ui/loader'; // Adjust path if needed
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-export default function SignUp() {
+export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    fullname: '',
     email: '',
     password: '',
   });
@@ -32,7 +31,7 @@ export default function SignUp() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/admin/add-admin`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/admin/login-admin`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -40,17 +39,17 @@ export default function SignUp() {
         }
       );
 
-      if (!response.ok) throw new Error('Signup failed');
+      if (!response.ok) throw new Error('login failed');
 
       const data = await response.json();
-      console.log('Signup successful:', data);
+      console.log('login successful:', data);
 
-      alert('Signup successful!');
-      setFormData({ fullname: '', email: '', password: '' });
-      router.push('/auth/login');
+      alert('login successful!');
+      setFormData({ email: '', password: '' });
+      router.push('/dashboard');
     } catch (error) {
-      console.error('Signup error:', error);
-      alert('Signup failed. Please try again.');
+      console.error('login error:', error);
+      alert('login failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -62,19 +61,7 @@ export default function SignUp() {
         onSubmit={handleSubmit}
         className="space-y-4 border-none shadow-lg bg-[#171818] p-6 rounded-md w-full max-w-sm"
       >
-        <h1 className="text-2xl font-bold text-[var(--txt-clr)] mb-4 text-center">Sign Up</h1>
-
-        <div className="flex items-center shadow-lg rounded-md bg-[var(--bg-clr)]">
-          <input
-            name="fullname"
-            value={formData.fullname}
-            onChange={handleChange}
-            className="w-full p-2 bg-transparent border-none outline-none text-[var(--txt-clr)] placeholder:text-[var(--sec-clr)]"
-            type="text"
-            placeholder="Fullname"
-            required
-          />
-        </div>
+        <h1 className="text-2xl font-bold text-[var(--txt-clr)] mb-4 text-center">Sign In</h1>
 
         <div className="flex items-center rounded-md shadow-lg bg-[var(--bg-clr)]">
           <input
@@ -110,10 +97,10 @@ export default function SignUp() {
 
         <div className='w-full flex justify-between items-center p-2'>
           <p className="text-[var(--txt-clr)] text-sm text-center">
-            Already have an account?{' '}
+            Don`t have an account?{' '}
           </p>
-          <Link href="/auth/login" className="text-red-700 hover:underline cursor-pointer transition-all duration-200">
-            Login
+          <Link href="/auth/signup" className="text-red-700 hover:underline cursor-pointer transition-all duration-200">
+            Sign Up
           </Link>
         </div>
 
@@ -122,7 +109,7 @@ export default function SignUp() {
           disabled={isLoading}
           className="w-full pry-ff py-2 bg-[var(--acc-clr)] text-[var(--txt-clr)] rounded-md hover:bg-red-900 transition-colors cursor-pointer flex justify-center items-center h-[40px]"
         >
-          {isLoading ? <DotsLoader /> : 'Sign Up'}
+          {isLoading ? <DotsLoader /> : 'login'}
         </button>
       </form>
     </section>
