@@ -65,7 +65,7 @@ export default function Sidebar() {
 
       {/* Avatar */}
       <div className="p-4 flex justify-left">
-        <div className="w-full px-4 py-2 rounded-full bg-gray-700 flex items-center justify-center">
+        <div className="px-4 py-2 rounded-full bg-gray-700 flex items-center justify-center">
           <span className="text-sm">N</span>
         </div>
       </div>
