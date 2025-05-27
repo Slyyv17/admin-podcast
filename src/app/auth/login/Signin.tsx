@@ -44,6 +44,8 @@ export default function SignIn() {
       const data = await response.json();
       console.log('login successful:', data);
 
+      localStorage.setItem('token', data.token);
+
       alert('login successful!');
       setFormData({ email: '', password: '' });
       router.push('/dashboard');
@@ -109,7 +111,7 @@ export default function SignIn() {
           disabled={isLoading}
           className="w-full pry-ff py-2 bg-[var(--acc-clr)] text-[var(--txt-clr)] rounded-md hover:bg-red-900 transition-colors cursor-pointer flex justify-center items-center h-[40px]"
         >
-          {isLoading ? <DotsLoader /> : 'login'}
+          {isLoading ? <DotsLoader /> : 'Login'}
         </button>
       </form>
     </section>

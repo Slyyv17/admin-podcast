@@ -1,9 +1,9 @@
-import Statistics from "./statistics"
+import Statistics from "./statistics";
 
-export default function mainDBComp() {
+export default function MainDBComp() {
     return (
-        <main className="h-screen w-full flex items-center justify-between bg-[var(--bg-clr)]">
+        <div className="w-full max-w-7xl mx-auto">
             <Statistics />
-        </main>
-    )
+        </div>
+    );
 }

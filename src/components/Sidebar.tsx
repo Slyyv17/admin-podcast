@@ -4,13 +4,18 @@ import { usePathname } from 'next/navigation';
 import { sidebarLinks } from '@/constants/sidebarLinks';
 import Link from 'next/link';
 import { useState } from 'react';
-import { Menu, X } from 'lucide-react'; // You can customize this
+import { Menu, X, LogOut } from 'lucide-react';
 
 export default function Sidebar() {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
 
   const toggleSidebar = () => setCollapsed(!collapsed);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    window.location.href = '/auth/login';
+  };
 
   return (
     <aside
@@ -37,13 +42,24 @@ export default function Sidebar() {
               key={name}
               href={href}
               className={`flex items-center gap-3 px-4 py-2 rounded-md transition ${
-                pathname === href ? 'bg-[#2B0B0A] text-[#E04B4C]' : 'text-[var(--txt-clr)] hover:bg-zinc-800'
+                pathname === href
+                  ? 'bg-[#2B0B0A] text-[#E04B4C]'
+                  : 'text-[var(--txt-clr)] hover:bg-zinc-800'
               }`}
             >
               <Icon className="w-5 h-5" />
               {!collapsed && <span>{name}</span>}
             </Link>
           ))}
+
+          {/* Logout Button Styled Like NavLink */}
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 w-full px-4 py-2 rounded-md text-left hover:bg-zinc-800 text-[var(--txt-clr)] transition"
+          >
+            <LogOut className="w-5 h-5" />
+            {!collapsed && <span>Logout</span>}
+          </button>
         </nav>
       </div>
 
