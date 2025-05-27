@@ -74,7 +74,7 @@ export default function Statistics() {
     <main className="w-full p-6 pry-ff bg-black text-[var(--txt-clr)] overflow-hidden">
       {/* Stats Section */}
       <section className="w-full max-w-5xl mx-auto mb-16">
-        <h2 className="text-2xl font-semibold mb-6 capitalize text-left">Statistics</h2>
+        <h2 className="text-xl font-semibold mb-6 capitalize text-left">Statistics</h2>
 
         <article className="flex w-fit justify-start gap-6 p-2 border border-[#1A1B1A] rounded-xl shadow bg-transparent">
           {[
@@ -92,7 +92,7 @@ export default function Statistics() {
 
       {/* Episodes Section */}
       <section className="w-full max-w-5xl mx-auto border border-[#1A1B1A] rounded-xl p-6 bg-transparent">
-        <h2 className="text-2xl font-semibold mb-6 capitalize text-left">Recent Episodes</h2>
+        <h2 className="text-xl font-semibold mb-6 capitalize text-left">Recent Episodes</h2>
 
         <RecentEpisodes episodes={recentEpisodesData} isLoading={isLoading} />
       </section>

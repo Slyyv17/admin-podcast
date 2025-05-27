@@ -55,7 +55,7 @@ export default function Sidebar() {
           {/* Logout Button Styled Like NavLink */}
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 w-full px-4 py-2 rounded-md text-left hover:bg-zinc-800 text-[var(--txt-clr)] transition"
+            className="flex items-center gap-3 w-full cursor-pointer px-4 py-2 rounded-md text-left text-[var(--txt-clr)] transition bg-[var(--acc-clr)]"
           >
             <LogOut className="w-5 h-5" />
             {!collapsed && <span>Logout</span>}
@@ -65,7 +65,7 @@ export default function Sidebar() {
 
       {/* Avatar */}
       <div className="p-4 flex justify-left">
-        <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center">
+        <div className="w-full px-4 py-2 rounded-full bg-gray-700 flex items-center justify-center">
           <span className="text-sm">N</span>
         </div>
       </div>
