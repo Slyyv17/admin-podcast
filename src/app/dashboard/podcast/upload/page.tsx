@@ -105,7 +105,7 @@ const UploadPodcast: React.FC = () => {
       <div className="bg-[var(--bg-clr)]/70 backdrop-blur-md p-6 sm:p-8 rounded-2xl shadow-2xl w-full max-w-2xl text-[var(--txt-clr)]">
         <h2 className="text-2xl font-bold mb-6 text-center">🎙 Upload a Podcast</h2>
 
-        {message && <p className="mb-4 text-sm text-red-500 text-center">{message}</p>}
+        {message && <p className="mb-4 text-sm text-green-500 text-center">{message}</p>}
 
         <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-5">
           <input
@@ -144,7 +144,7 @@ const UploadPodcast: React.FC = () => {
             name="coverImg"
             accept="image/*"
             onChange={handleChange}
-            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[var(--acc-clr)] file:text-white hover:file:bg-opacity-90"
+            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[var(--acc-clr)] file:text-[#F4F4F5] cursor-pointer hover:file:bg-opacity-90"
           />
 
           {previewUrl && (
@@ -160,7 +160,7 @@ const UploadPodcast: React.FC = () => {
 
           <button
             type="submit"
-            className="w-full bg-[var(--acc-clr)] text-white py-3 rounded-lg font-semibold hover:opacity-90 transition-all"
+            className="w-full bg-[var(--acc-clr)] text-[var(--txt-clr)] cursor-pointer py-3 rounded-lg font-semibold hover:opacity-90 transition-all"
           >
             {isLoading ? <DotsLoader /> : 'Upload Podcast'}
           </button>

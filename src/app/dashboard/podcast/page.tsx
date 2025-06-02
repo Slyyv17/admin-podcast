@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function PodcastPage() {
   return (
-    <main className="min-h-screen w-full bg-[#131313] flex items-center justify-center px-4 py-10">
+    <main className="min-h-screen w-full bg-[var(--bg-clr)] flex items-center justify-center px-4 py-10">
       <div className="flex flex-col sm:flex-row gap-6 pry-ff">
         
         <Link href="/dashboard/podcast/upload">
