@@ -59,22 +59,35 @@ const UploadPodcast: React.FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-
+  
     if (!formData.title || !formData.description || !formData.coverImg) {
       setIsLoading(false);
       return setMessage('All fields are required.');
     }
-
+  
     const data = new FormData();
     data.append('title', formData.title);
     data.append('description', formData.description);
     data.append('coverImg', formData.coverImg);
-
+  
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setIsLoading(false);
+      return setMessage('You must be logged in to upload a podcast.');
+    }
+  
     try {
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/podcast/new-podcast`,
-        data
+        data,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${token}`, // ✅ correct way to send the token
+          },
+        }
       );
+  
       setMessage(res.data.message ?? 'Podcast uploaded!');
       setFormData({ title: '', description: '', coverImg: null });
       setPreviewUrl(null);
@@ -85,6 +98,7 @@ const UploadPodcast: React.FC = () => {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <div className="w-full min-h-screen flex items-center justify-center bg-[var(--bg-clr)] px-4 py-10 overflow-auto pry-ff">
