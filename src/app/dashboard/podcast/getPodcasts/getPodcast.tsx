@@ -1,116 +1,127 @@
 'use client';
 
-import { useState, useEffect } from "react";
-import DotsLoader from "@/components/ui/loader";
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import DotsLoader from '@/components/ui/loader';
 
 interface Podcast {
+  id: string;
   title: string;
   description: string;
   coverImg: string;
 }
 
 export default function GetPodcast() {
-  const [podcast, setPodcast] = useState<Podcast[]>([]);
+  const [podcasts, setPodcasts] = useState<Podcast[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-
     if (!token) {
-      setMessage('You must be logged in to upload a podcast.');
+      setMessage('You must be logged in to view podcasts.');
       return;
     }
 
-    const fetchPodcast = async () => {
+    const fetchPodcasts = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/podcast/get-podcasts`, {
-          method: 'GET',
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/podcast/get-podcasts`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch podcasts');
-        }
+        if (!res.ok) throw new Error('Failed to fetch podcasts');
+        const data = await res.json();
 
-        const data = await response.json();
-        if (Array.isArray(data.podcasts)) {
-          setPodcast(data.podcasts);
-        } else if (Array.isArray(data)) {
-          setPodcast(data);
-        } else {
-          setMessage("Unexpected data format from server.");
-        }
+        const rawList = Array.isArray(data.podcasts) ? data.podcasts : data;
+        const normalised: Podcast[] = rawList.map((p: any) => ({
+          id: p._id ?? p.id,
+          title: p.title,
+          description: p.description,
+          coverImg: p.coverImg,
+        }));
+
+        setPodcasts(normalised);
         setMessage('');
-      } catch (error: any) {
-        console.error('Error fetching podcast:', error.message);
-        setMessage('Error fetching podcast.');
+      } catch (err: any) {
+        console.error(err);
+        setMessage('Error fetching podcasts.');
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchPodcast();
+    fetchPodcasts();
   }, []);
-
-  const toggleExpand = (index: number) => {
-    setExpandedIndex(expandedIndex === index ? null : index);
-  };
 
   return (
     <main className="w-full min-h-screen px-6 py-8 bg-[var(--bg-clr)] pry-ff">
-      <h1 className="text-3xl font-bold mb-6 text-[var(--acc-clr)]">🎧 All Podcasts</h1>
+      <h1 className="text-3xl font-bold mb-8 text-[var(--acc-clr)]">🎧 All Podcasts</h1>
 
       {isLoading ? (
-        <div className="min-h-screen w-full flex justify-center items-center">
-            <DotsLoader />
+        <div className="flex items-center justify-center min-h-[50vh]">
+          <DotsLoader />
         </div>
       ) : message ? (
-        <p className="text-red-500">{message}</p>
-      ) : Array.isArray(podcast) ? (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 shadow-lg">
-          {podcast.map((item, index) => {
+        <p className="text-center text-red-500 text-lg">{message}</p>
+      ) : (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
+          {podcasts.map((item, index) => {
             const isExpanded = expandedIndex === index;
-            const shouldTruncate = item.description.length > 100;
-            const displayText = isExpanded || !shouldTruncate
-              ? item.description
-              : item.description.slice(0, 100) + '...';
+            const truncated =
+              item.description.length > 100 && !isExpanded
+                ? item.description.slice(0, 100) + '…'
+                : item.description;
 
             return (
-              <div
-                key={index}
-                className="bg-white/10 backdrop-blur-md rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition duration-500 border border-white/10 cursor-pointer hover:scale-105"
+              <Link
+                href={`/dashboard/podcast/${item.id}`}
+                key={item.id}
+                className="group block bg-white/10 backdrop-blur rounded-xl border border-white/20
+                           shadow-md hover:shadow-xl hover:scale-[1.03] transition-transform duration-300 ease-in-out
+                           will-change-transform overflow-hidden"
               >
                 <img
                   src={item.coverImg}
-                  alt={item.title}
-                  className="w-full h-56 object-cover"
+                  alt={`Cover image for ${item.title}`}
+                  className="w-full h-56 object-cover rounded-t-xl"
+                  loading="lazy"
                 />
-                <div className="p-4">
-                  <h2 className="text-xl font-semibold text-[var(--acc-clr)] mb-2">{item.title}</h2>
-                  <p className="text-sm text-[var(--txt-clr)] mb-1">
-                    {displayText}
-                    {shouldTruncate && (
+
+                <div className="p-5">
+                  <h2 className="text-xl font-semibold text-[var(--acc-clr)] mb-3 line-clamp-2 group-hover:underline">
+                    {item.title}
+                  </h2>
+
+                  <p className="text-sm text-[var(--txt-clr)] leading-relaxed">
+                    {truncated}
+                    {item.description.length > 100 && (
                       <button
-                        onClick={() => toggleExpand(index)}
-                        className="text-[var(--sec-clr)] hover:underline ml-1 cursor-pointer"
+                        type="button"
+                        aria-expanded={isExpanded}
+                        className="ml-2 text-[var(--sec-clr)] hover:underline focus:outline-none focus:ring-2 focus:ring-[var(--sec-clr)] rounded"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setExpandedIndex(isExpanded ? null : index);
+                        }}
                       >
                         {isExpanded ? 'See less' : 'See more'}
                       </button>
                     )}
                   </p>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>
-      ) : (
-        <p className="text-red-500">Invalid podcast data.</p>
       )}
     </main>
   );

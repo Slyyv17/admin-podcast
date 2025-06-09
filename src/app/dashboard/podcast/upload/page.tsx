@@ -101,7 +101,7 @@ const UploadPodcast: React.FC = () => {
   
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center bg-[var(--bg-clr)] px-4 py-10 overflow-auto pry-ff">
+    <div className="w-full flex items-center justify-center bg-[var(--bg-clr)] px-4 py-10 overflow-auto pry-ff">
       <div className="bg-[var(--bg-clr)]/70 backdrop-blur-md p-6 sm:p-8 rounded-2xl shadow-2xl w-full max-w-2xl text-[var(--txt-clr)]">
         <h2 className="text-2xl font-bold mb-6 text-center">🎙 Upload a Podcast</h2>
 
