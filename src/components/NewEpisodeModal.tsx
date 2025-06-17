@@ -2,6 +2,7 @@
 
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import DotsLoader from '@/components/ui/loader';
+import { X } from 'lucide-react';
 
 interface Props {
   onClose: () => void;
@@ -66,7 +67,7 @@ export default function NewEpisodeModal({ onClose, podcastId }: Props) {
       const res = await response.json();
 
       if (!response.ok) {
-        throw new Error(res.message || 'Upload failed');
+        throw new Error(res.message ?? 'Upload failed');
       }
 
       setMessage(res.message ?? 'Episode uploaded!');
@@ -83,12 +84,12 @@ export default function NewEpisodeModal({ onClose, podcastId }: Props) {
   return (
     <div className="fixed inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/70
             backdrop-blur-sm bg-opacity-60 z-50 flex items-center justify-center">
-      <div className="bg-black/50 text-white rounded-xl w-full max-w-2xl p-6 relative">
-        <button onClick={onClose} className="absolute top-4 right-4 text-gray-300 hover:text-[var] text-xl">
-          &times;
+      <div className="bg-black/50 text-[var(--txt-clr)] rounded-xl w-full max-w-2xl p-6 relative">
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-300 hover:text-[var] text-xl cursor-pointer">
+          <X size={20} />
         </button>
 
-        <h2 className="text-2xl font-bold mb-6 text-red-400 text-center">🎧 Upload New Episode</h2>
+        <h2 className="text-2xl font-bold mb-6 text-red-500 text-center">🎧 Upload New Episode</h2>
 
         {message && (
           <p
@@ -109,14 +110,14 @@ export default function NewEpisodeModal({ onClose, podcastId }: Props) {
             placeholder="Episode Title"
             value={formData.title}
             onChange={handleChange}
-            className="w-full p-3 rounded-lg border bg-gray-700 focus:outline-none"
+            className="w-full p-3 rounded-lg border bg-black/50 focus:outline-none"
           />
           <textarea
             name="description"
             placeholder="Episode Description"
             value={formData.description}
             onChange={handleChange}
-            className="w-full p-3 rounded-lg border bg-gray-700 resize-none h-32 focus:outline-none"
+            className="w-full p-3 rounded-lg border bg-black/50 resize-none h-32 focus:outline-none"
           />
           <input
             type="file"
