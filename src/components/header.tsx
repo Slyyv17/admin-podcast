@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { User } from "lucide-react";
 
 export default function Header() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<{ fullname: string } | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {

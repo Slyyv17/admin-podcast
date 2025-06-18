@@ -3,9 +3,19 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import DotsLoader from '@/components/ui/loader';
+import Image from 'next/image';
 
 interface Podcast {
   id: string;
+  title: string;
+  description: string;
+  coverImg: string;
+}
+
+// Raw podcast data from backend (may have _id or id)
+interface RawPodcast {
+  _id?: string;
+  id?: string;
   title: string;
   description: string;
   coverImg: string;
@@ -41,8 +51,8 @@ export default function GetPodcast() {
         const data = await res.json();
 
         const rawList = Array.isArray(data.podcasts) ? data.podcasts : data;
-        const normalised: Podcast[] = rawList.map((p: any) => ({
-          id: p._id ?? p.id,
+        const normalised: Podcast[] = rawList.map((p: RawPodcast) => ({
+          id: p._id ?? p.id ?? '',
           title: p.title,
           description: p.description,
           coverImg: p.coverImg,
@@ -50,8 +60,9 @@ export default function GetPodcast() {
 
         setPodcasts(normalised);
         setMessage('');
-      } catch (err: any) {
-        console.error(err);
+      } catch (err: unknown) {
+        const error = err as Error;
+        console.error(error.message || 'Unknown error');
         setMessage('Error fetching podcasts.');
       } finally {
         setIsLoading(false);
@@ -88,7 +99,9 @@ export default function GetPodcast() {
                            shadow-md hover:shadow-xl hover:scale-[1.03] transition-transform duration-300 ease-in-out
                            will-change-transform overflow-hidden"
               >
-                <img
+                <Image
+                  width={500}
+                  height={300}
                   src={item.coverImg}
                   alt={`Cover image for ${item.title}`}
                   className="w-full h-56 object-cover rounded-t-xl"

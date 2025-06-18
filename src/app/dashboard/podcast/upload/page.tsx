@@ -2,6 +2,7 @@
 
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
+import Image from 'next/image';
 import DotsLoader from '@/components/ui/loader';
 
 const UploadPodcast: React.FC = () => {
@@ -59,23 +60,23 @@ const UploadPodcast: React.FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-  
+
     if (!formData.title || !formData.description || !formData.coverImg) {
       setIsLoading(false);
       return setMessage('All fields are required.');
     }
-  
+
     const data = new FormData();
     data.append('title', formData.title);
     data.append('description', formData.description);
     data.append('coverImg', formData.coverImg);
-  
+
     const token = localStorage.getItem('token');
     if (!token) {
       setIsLoading(false);
       return setMessage('You must be logged in to upload a podcast.');
     }
-  
+
     try {
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/podcast/new-podcast`,
@@ -83,11 +84,11 @@ const UploadPodcast: React.FC = () => {
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            'Authorization': `Bearer ${token}`, // ✅ correct way to send the token
+            Authorization: `Bearer ${token}`,
           },
         }
       );
-  
+
       setMessage(res.data.message ?? 'Podcast uploaded!');
       setFormData({ title: '', description: '', coverImg: null });
       setPreviewUrl(null);
@@ -98,7 +99,6 @@ const UploadPodcast: React.FC = () => {
       setIsLoading(false);
     }
   };
-  
 
   return (
     <div className="w-full flex items-center justify-center bg-[var(--bg-clr)] px-4 py-10 overflow-auto pry-ff">
@@ -117,12 +117,12 @@ const UploadPodcast: React.FC = () => {
             className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent focus:outline-none focus:ring-2 focus:ring-[var(--acc-clr)]"
           />
 
-<div className="flex gap-2">
-            {['bold', 'italic', 'list'].map(syntax => (
+          <div className="flex gap-2">
+            {(['bold', 'italic', 'list'] as Array<'bold' | 'italic' | 'list'>).map(syntax => (
               <button
                 key={syntax}
                 type="button"
-                onClick={() => insertMarkdown(syntax as any)}
+                onClick={() => insertMarkdown(syntax)}
                 className="bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 px-3 py-1 rounded text-sm"
               >
                 {syntax[0].toUpperCase() + syntax.slice(1)}
@@ -150,9 +150,12 @@ const UploadPodcast: React.FC = () => {
           {previewUrl && (
             <div className="mt-4">
               <p className="mb-2 text-sm text-gray-500">Image Preview:</p>
-              <img
+              <Image
                 src={previewUrl}
                 alt="Preview"
+                width={500}
+                height={300}
+                unoptimized
                 className="w-full max-h-64 object-contain rounded-lg border border-gray-300 bg-transparent"
               />
             </div>
